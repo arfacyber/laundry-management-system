@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pengaturan Khusus untuk Cetak (Print) */
+@media print {
+    /* Sembunyikan semua elemen layout utama (Sidebar, Header, dsb) */
+    aside, header, nav, button, .print\:hidden {
+        display: none !important;
+    }
+    
+    /* Atur agar area konten (struk) memenuhi kertas tanpa background/margin */
+    body, main {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Pastikan border dan warna teks tetap tajam saat dicetak */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
