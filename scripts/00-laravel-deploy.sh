@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+echo "Running composer..."
+composer install --no-dev --optimize-autoloader
+
+echo "Caching config & routes..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+echo "Linking storage..."
+php artisan storage:link
+
+echo "Running migrations..."
+php artisan migrate --force
