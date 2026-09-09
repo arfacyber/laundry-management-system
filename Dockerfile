@@ -28,7 +28,7 @@ RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build
 
-# Create Laravel storage folders and set permissions for web server
+# Create Laravel storage folders, set permissions, and run cache during build
 RUN mkdir -p /var/www/html/storage/framework/views \
     /var/www/html/storage/framework/cache \
     /var/www/html/storage/framework/sessions \
@@ -41,4 +41,5 @@ COPY docker/nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 
-CMD php artisan config:cache && php artisan route:cache && php artisan view:cache && service nginx start && php-fpm
+# Clean startup command without runtime cache generation errors
+CMD service nginx start && php-fpm
