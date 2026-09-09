@@ -28,10 +28,17 @@ RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build
 
+# Create Laravel storage folders and set permissions for web server
+RUN mkdir -p /var/www/html/storage/framework/views \
+    /var/www/html/storage/framework/cache \
+    /var/www/html/storage/framework/sessions \
+    /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
 # Configure Nginx
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 
-CMD php artisan config:cache && php artisan route:cache && service nginx start && php-fpm
-# Trigger auto build
+CMD php artisan config:cache && php artisan route:cache && php artisan view:cache && service nginx start && php-fpm
