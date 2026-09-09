@@ -34,3 +34,4 @@ COPY docker/nginx.conf /etc/nginx/sites-available/default
 EXPOSE 80
 
 CMD php artisan config:cache && php artisan route:cache && service nginx start && php-fpm
+# Trigger auto build
