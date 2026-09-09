@@ -28,9 +28,8 @@ RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build
 
-# Create Laravel storage folders, clear stuck cache, and ensure correct permissions
-RUN php artisan optimize:clear \
-    && mkdir -p /var/www/html/storage/framework/views \
+# Create Laravel storage folders and ensure correct permissions
+RUN mkdir -p /var/www/html/storage/framework/views \
     /var/www/html/storage/framework/cache \
     /var/www/html/storage/framework/sessions \
     /var/www/html/bootstrap/cache \
