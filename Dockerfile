@@ -38,4 +38,4 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/app.ini
 
 EXPOSE 80
 
-CMD service nginx start && php-fpm
+CMD service nginx start && php-fpm# Trigger deployment refresh 
