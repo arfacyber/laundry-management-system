@@ -1,6 +1,5 @@
 FROM php:8.2-fpm
 
-# Install system dependencies & Node.js
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,21 +13,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 COPY . .
 
-# Install PHP & Node dependencies, then build assets
 RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build
 
-# Create Laravel storage folders, set permissions, and fix temporary directory
+# Buat direktori dan berikan hak akses penuh ke user www-data
 RUN mkdir -p /var/www/html/storage/framework/views \
     /var/www/html/storage/framework/cache \
     /var/www/html/storage/framework/sessions \
@@ -36,12 +32,10 @@ RUN mkdir -p /var/www/html/storage/framework/views \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Set PHP temporary directory environment variable to avoid tempnam error
-ENV TMPDIR=/var/www/html/storage/framework/cache
-
-# Configure Nginx
+# Konfigurasi Nginx
 COPY docker/nginx.conf /etc/nginx/sites-available/default
+COPY docker/php.ini /usr/local/etc/php/conf.d/app.ini
 
 EXPOSE 80
 
-CMD service nginx start && php-fpm# Force Railway Redeploy 
+CMD service nginx start && php-fpm
