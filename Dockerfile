@@ -1,5 +1,6 @@
 FROM php:8.2-fpm
 
+# Install system dependencies & Node.js
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -13,18 +14,21 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+# Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 COPY . .
 
+# Install PHP & Node dependencies, then build assets
 RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build
 
-# Buat direktori dan berikan hak akses penuh ke user www-data
+# Create Laravel storage folders and ensure correct permissions
 RUN mkdir -p /var/www/html/storage/framework/views \
     /var/www/html/storage/framework/cache \
     /var/www/html/storage/framework/sessions \
@@ -32,10 +36,9 @@ RUN mkdir -p /var/www/html/storage/framework/views \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Konfigurasi Nginx
+# Configure Nginx
 COPY docker/nginx.conf /etc/nginx/sites-available/default
-COPY docker/php.ini /usr/local/etc/php/conf.d/app.ini
 
 EXPOSE 80
 
-CMD service nginx start && php-fpm# Trigger deployment refresh 
+CMD service nginx start && php-fpm
