@@ -44,4 +44,4 @@ COPY docker/nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 
-CMD service nginx start && php-fpm
+CMD service nginx start && php-fpm# Force Railway Redeploy 
