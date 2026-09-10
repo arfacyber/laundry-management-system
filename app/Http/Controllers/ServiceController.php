@@ -18,6 +18,8 @@ class ServiceController extends Controller
 
         $services = $query->latest()->paginate(10);
 
+        // Jika file view Anda ada di dalam folder 'resources/views/admin/services/', 
+        // pastikan ini diubah menjadi 'admin.services.index'
         return view('services.index', compact('services'));
     }
 
@@ -39,7 +41,8 @@ class ServiceController extends Controller
 
         Service::create($request->all());
 
-        return redirect()->route('services.index')->with('success', 'Layanan baru berhasil ditambahkan.');
+        // Diperbarui: Menggunakan nama rute yang benar (admin.services.index)
+        return redirect()->route('admin.services.index')->with('success', 'Layanan baru berhasil ditambahkan.');
     }
 
     public function edit(Service $service)
@@ -60,20 +63,22 @@ class ServiceController extends Controller
 
         $service->update($request->all());
 
-        return redirect()->route('services.index')->with('success', 'Data layanan berhasil diperbarui.');
+        // Diperbarui: Menggunakan nama rute yang benar
+        return redirect()->route('admin.services.index')->with('success', 'Data layanan berhasil diperbarui.');
     }
 
     public function destroy(Service $service)
     {
         try {
             $service->delete();
-            return redirect()->route('services.index')->with('success', 'Layanan berhasil dihapus.');
+            // Diperbarui: Menggunakan nama rute yang benar
+            return redirect()->route('admin.services.index')->with('success', 'Layanan berhasil dihapus.');
         } catch (QueryException $e) {
             // Error 1451 menandakan ada Foreign Key constraint fails (data sudah dipakai di transaksi)
             if ($e->getCode() == "23000") {
-                return redirect()->route('services.index')->with('error', 'Gagal! Layanan tidak dapat dihapus karena sudah memiliki riwayat transaksi. Solusi: Ubah status menjadi Nonaktif.');
+                return redirect()->route('admin.services.index')->with('error', 'Gagal! Layanan tidak dapat dihapus karena sudah memiliki riwayat transaksi. Solusi: Ubah status menjadi Nonaktif.');
             }
-            return redirect()->route('services.index')->with('error', 'Terjadi kesalahan saat menghapus data.');
+            return redirect()->route('admin.services.index')->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
     }
 }
