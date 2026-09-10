@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-semibold text-gray-900">Daftar Transaksi</h1>
             <p class="text-sm text-gray-500 mt-1">Pantau seluruh riwayat pesanan laundry.</p>
         </div>
-        <a href="{{ route('transactions.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 transition">
+        <a href="{{ route('transactions.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 transition">
             <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             Buat Transaksi Baru
         </a>
@@ -19,23 +19,25 @@
 
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <!-- Search & Filter -->
-        <div class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row gap-4">
-            <form action="{{ route('transactions.index') }}" method="GET" class="flex flex-1 max-w-2xl gap-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kode TRX atau Nama Pelanggan..." class="flex-1 rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <form action="{{ route('transactions.index') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Kode TRX atau Nama Pelanggan..." class="flex-1 rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2">
                 
-                <select name="status" class="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <select name="status" class="w-full sm:w-48 rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2">
                     <option value="">Semua Status</option>
                     @foreach(['Menunggu', 'Diproses', 'Dicuci', 'Dikeringkan', 'Disetrika', 'Siap Diambil', 'Selesai', 'Dibatalkan'] as $stat)
                         <option value="{{ $stat }}" {{ request('status') == $stat ? 'selected' : '' }}>{{ $stat }}</option>
                     @endforeach
                 </select>
 
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
-                    Filter
-                </button>
-                @if(request('search') || request('status'))
-                    <a href="{{ route('transactions.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Reset</a>
-                @endif
+                <div class="flex gap-2">
+                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 transition">
+                        Filter
+                    </button>
+                    @if(request('search') || request('status'))
+                        <a href="{{ route('transactions.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition">Reset</a>
+                    @endif
+                </div>
             </form>
         </div>
 
@@ -54,7 +56,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($transactions as $trx)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{{ $trx->transaction_code }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $trx->customer->nama }}</div>
@@ -65,20 +67,20 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
                                     $color = match($trx->status_laundry) {
-                                        'Menunggu' => 'bg-gray-100 text-gray-800',
-                                        'Diproses', 'Dicuci', 'Dikeringkan', 'Disetrika' => 'bg-yellow-100 text-yellow-800',
-                                        'Siap Diambil' => 'bg-blue-100 text-blue-800',
-                                        'Selesai' => 'bg-green-100 text-green-800',
-                                        'Dibatalkan' => 'bg-red-100 text-red-800',
-                                        default => 'bg-gray-100 text-gray-800'
+                                        'Menunggu' => 'bg-gray-100 text-gray-800 border-gray-200',
+                                        'Diproses', 'Dicuci', 'Dikeringkan', 'Disetrika' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                                        'Siap Diambil' => 'bg-blue-100 text-blue-800 border-blue-200',
+                                        'Selesai' => 'bg-green-100 text-green-800 border-green-200',
+                                        'Dibatalkan' => 'bg-red-100 text-red-800 border-red-200',
+                                        default => 'bg-gray-100 text-gray-800 border-gray-200'
                                     };
                                 @endphp
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $color }}">
+                                <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-bold rounded-full border {{ $color }}">
                                     {{ $trx->status_laundry }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('transactions.show', $trx->id) }}" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded">Detail & Kelola</a>
+                                <a href="{{ route('transactions.show', $trx->id) }}" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1.5 rounded-md hover:bg-blue-100 transition inline-block">Detail & Kelola</a>
                             </td>
                         </tr>
                     @empty

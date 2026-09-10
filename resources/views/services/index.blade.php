@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-semibold text-gray-900">Manajemen Layanan</h1>
             <p class="text-sm text-gray-500 mt-1">Kelola daftar layanan dan harga laundry Anda.</p>
         </div>
-        <a href="{{ route('admin.services.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 transition">
+        <a href="{{ route('admin.services.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 transition">
             <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             Tambah Layanan
         </a>
@@ -26,14 +26,16 @@
 
     <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div class="p-4 border-b border-gray-200 bg-gray-50">
-            <form action="{{ route('admin.services.index') }}" method="GET" class="flex max-w-md">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama layanan..." class="flex-1 rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-gray-600 hover:bg-gray-700">
-                    Cari
-                </button>
-                @if(request('search'))
-                    <a href="{{ route('admin.services.index') }}" class="ml-2 inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Reset</a>
-                @endif
+            <form action="{{ route('admin.services.index') }}" method="GET" class="flex flex-col sm:flex-row gap-2 max-w-lg">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama layanan..." class="flex-1 rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <div class="flex gap-2">
+                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 transition">
+                        Cari
+                    </button>
+                    @if(request('search'))
+                        <a href="{{ route('admin.services.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition">Reset</a>
+                    @endif
+                </div>
             </form>
         </div>
 
@@ -50,7 +52,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($services as $service)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $service->nama_layanan }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Rp {{ number_format($service->harga, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $service->unit }}</td>
