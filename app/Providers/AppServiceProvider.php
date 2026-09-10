@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Paksa penggunaan HTTPS di environment production (Railway)
         if (env('APP_ENV') === 'production') {
-            URL::forceScheme('https');
         }
     }
 }
