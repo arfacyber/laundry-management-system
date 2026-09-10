@@ -77,11 +77,11 @@
                     <p class="font-bold text-blue-800 mb-2">Akun Demo Akses:</p>
                     <div class="flex justify-between border-b border-blue-200 pb-2 mb-2">
                         <span>Admin: <span class="font-bold text-gray-900">admin@laundry.com</span></span>
-                        <span class="font-mono">password123</span>
+                        <span class="font-mono">password</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Staff: <span class="font-bold text-gray-900">staff@laundry.com</span></span>
-                        <span class="font-mono">password123</span>
+                        <span class="font-mono">password</span>
                     </div>
                 </div>
             </div>
