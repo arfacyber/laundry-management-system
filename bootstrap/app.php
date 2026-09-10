@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Mempercayai semua proxy Railway agar CSS/Aset memuat HTTPS dengan benar
+        $middleware->trustProxies(at: '*');
+
         // Mendaftarkan alias 'role' untuk RoleMiddleware
         $middleware->alias([
             'role' => RoleMiddleware::class,
